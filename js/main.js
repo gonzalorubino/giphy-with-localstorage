@@ -1,16 +1,34 @@
-const API_KEY = ""; // PEGUEN ACA SU API KEY!!
+const API_KEY = "SjCp1QkBXNxOfSINZuGzAFqKZSgjYMZ9"; // PEGUEN ACA SU API KEY!!
 const URL = "https://api.giphy.com/v1/gifs/";
 
 const button = document.getElementById('sendButton');
 const main = document.getElementById('main');
 const inputElement = document.getElementById('search');
+const selectElement = document.getElementById("color-select");
+const bodyEl = document.getElementById("body");
 
 const spinner = document.getElementById('spinner');
 
-button.addEventListener("click", ()=> {
-    console.log('valor', inputElement.value);
-    showSpinner();
-    searchGif(inputElement.value);
+const valorUltimaBusqueda = JSON.parse(localStorage.getItem("responseGiphy"));
+
+if (valorUltimaBusqueda != null) {
+    madeGrid(valorUltimaBusqueda);
+}
+
+const valorColor = JSON.parse(localStorage.getItem('color'));
+
+bodyEl.style.backgroundColor = valorColor;
+
+selectElement.addEventListener("change", () => {
+  console.log("valor", selectElement.value);
+  saveResults('color', selectElement.value);
+  bodyEl.style.backgroundColor = selectElement.value;
+});
+
+button.addEventListener("click", () => {
+  console.log("valor", inputElement.value);
+  showSpinner();
+  searchGif(inputElement.value);
 });
 
 function searchGif(valorABuscar){
@@ -25,6 +43,7 @@ function searchGif(valorABuscar){
                 //console.log('respuesta', req.response);
                 var parseResponse = JSON.parse(req.response); // Hago un objeto JSON la Respuesta.
                 madeGrid(parseResponse.data);
+                saveResults('responseGiphy', parseResponse.data);
             }
         } else {
             console.log("Error ejecutando el pedido. Estado: ", req.readyState);
@@ -32,6 +51,11 @@ function searchGif(valorABuscar){
     }
 
     req.send(null);
+}
+
+function saveResults(name, data){
+    // JSON Stringify convierte a Texto lo que viene.
+    localStorage.setItem(name, JSON.stringify(data));
 }
 
 function madeGrid(data){

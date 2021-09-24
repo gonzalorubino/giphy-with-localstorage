@@ -1,4 +1,4 @@
-const API_KEY = process.env.API_KEY; // PEGUEN ACA SU API KEY!!
+const API_KEY = "SjCp1QkBXNxOfSINZuGzAFqKZSgjYMZ9"; // PEGUEN ACA SU API KEY!!
 const URL = "https://api.giphy.com/v1/gifs/";
 
 const button = document.getElementById('sendButton');
